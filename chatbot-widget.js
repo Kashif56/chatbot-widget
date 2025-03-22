@@ -21,7 +21,7 @@
         initialMessage: null, // Must be provided by the website owner
         
         // Optional configuration
-        botAvatar: 'https://via.placeholder.com/30',
+        botAvatar: 'https://images.pexels.com/photos/2599244/pexels-photo-2599244.jpeg?auto=compress&cs=tinysrgb&w=600',
         sessionKey: null  // Will be auto-generated if not provided
     };
 
