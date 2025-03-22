@@ -7,7 +7,7 @@
     // Configuration options with defaults
     const config = {
         // Static configuration (not modifiable by website owners)
-        apiEndpoint: 'https://cleaningbizai.com/ai_agent/api/chat/',
+        apiEndpoint: 'https://5ccf-223-123-88-90.ngrok-free.app/ai_agent/api/chat/',
         chatbotAccentColor: '#4a6cf7',
         position: 'right',
         width: '400px',
