@@ -853,10 +853,8 @@
                 
                 // API URL from config
                 const url = config.apiEndpoint;
-                // Remove trailing slash if present for POST requests
-                const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
                 
-                const response = await fetch(cleanUrl, {
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
