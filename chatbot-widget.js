@@ -6,7 +6,7 @@
     // Configuration options with defaults
     const config = {
         // Static configuration (not modifiable by website owners)
-        apiEndpoint: 'https://cleaningbizai.up.railway.app/ai_agent/api/chat/',
+        apiEndpoint: 'https://cleaningbizai.com/ai_agent/api/chat/',
         chatbotAccentColor: '#4a6cf7',
         position: 'right',
         width: '400px',
