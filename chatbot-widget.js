@@ -671,6 +671,9 @@
                 } else if (data.messages && Array.isArray(data.messages) && data.messages.length > 0) {
                     // Standard format with messages array
                     data.messages.forEach(msg => {
+                        // Skip messages with 'tool' role
+                        if (msg.role === 'tool') return;
+                        
                         const sender = msg.sender === 'user' || msg.role === 'user' ? 'user' : 'bot';
                         const text = msg.text || msg.content || msg.message || '';
                         const timestamp = msg.timestamp ? new Date(msg.timestamp) : new Date();
@@ -682,6 +685,9 @@
                 } else if (data.conversation && Array.isArray(data.conversation) && data.conversation.length > 0) {
                     // Alternate format with conversation array
                     data.conversation.forEach(msg => {
+                        // Skip messages with 'tool' role
+                        if (msg.role === 'tool') return;
+                        
                         const sender = msg.sender === 'user' || msg.role === 'user' ? 'user' : 'bot';
                         const text = msg.text || msg.content || msg.message || '';
                         const timestamp = msg.timestamp ? new Date(msg.timestamp) : new Date();
@@ -693,6 +699,9 @@
                 } else if (Array.isArray(data) && data.length > 0) {
                     // Direct array format
                     data.forEach(msg => {
+                        // Skip messages with 'tool' role
+                        if (msg.role === 'tool') return;
+                        
                         const sender = msg.sender === 'user' || msg.role === 'user' ? 'user' : 'bot';
                         const text = msg.text || msg.content || msg.message || '';
                         const timestamp = msg.timestamp ? new Date(msg.timestamp) : new Date();
@@ -887,6 +896,11 @@
         
         // Process API response
         function processResponse(data) {
+            // Check if the response has a role of 'tool' and skip displaying it
+            if (data.role === 'tool') {
+                return;
+            }
+            
             if (data.response) {
                 addMessage(data.response, 'bot');
             } else if (data.reply) {
