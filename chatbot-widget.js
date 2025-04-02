@@ -3,7 +3,6 @@
  * An embeddable chatbot widget for any website
  */
 (function() {
-    console.log('Chatbot Widget: Script initialized');
     // Configuration options with defaults
     const config = {
         // Static configuration (not modifiable by website owners)
@@ -27,7 +26,6 @@
 
     // Generate a unique session key
     function generateSessionKey() {
-        console.log('Chatbot Widget: Generating new session key');
         const timestamp = new Date().getTime();
         const randomPart = Math.random().toString(36).substring(2, 10);
         return `session_${timestamp}_${randomPart}`;
@@ -35,7 +33,6 @@
 
     // Merge user configuration with defaults
     function mergeConfig(userConfig) {
-        console.log('Chatbot Widget: Merging configurations', userConfig);
         // Only allow changing specific properties
         const allowedProperties = ['businessId', 'botName', 'initialMessage', 'botAvatar', 'sessionKey'];
         
@@ -66,13 +63,11 @@
             config.sessionKey = generateSessionKey();
         }
         
-        console.log('Chatbot Widget: Configuration after merge:', JSON.stringify(config, null, 2));
         return true;
     }
 
     // Create and inject styles
     function injectStyles() {
-        console.log('Chatbot Widget: Injecting styles');
         const styleElement = document.createElement('style');
         styleElement.id = 'chatbot-widget-styles';
         
@@ -520,11 +515,8 @@
 
     // Create widget DOM structure
     function createWidgetDOM() {
-        console.log('Chatbot Widget: Creating DOM elements');
-        
         // Add Font Awesome if not present
         if (!document.querySelector('link[href*="font-awesome"]')) {
-            console.log('Chatbot Widget: Adding Font Awesome');
             const fontAwesome = document.createElement('link');
             fontAwesome.rel = 'stylesheet';
             fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
@@ -542,7 +534,6 @@
             <i class="fa-solid fa-comment chat-icon"></i>
             <i class="fa-solid fa-times close-icon"></i>
         `;
-        console.log('Chatbot Widget: Chat button created');
         
         // Chat modal
         const chatModal = document.createElement('div');
@@ -593,7 +584,6 @@
         chatModal.appendChild(chatHeader);
         chatModal.appendChild(chatMessages);
         chatModal.appendChild(chatInputContainer);
-        console.log('Chatbot Widget: Chat modal created');
         
         // Assemble widget
         widgetContainer.appendChild(chatButton);
@@ -601,12 +591,10 @@
         
         // Add to DOM
         document.body.appendChild(widgetContainer);
-        console.log('Chatbot Widget: All DOM elements added to document body');
     }
 
     // Initialize event listeners
     function initEventListeners() {
-        console.log('Chatbot Widget: Initializing event listeners');
         const chatButton = document.getElementById('chat-button');
         const chatModal = document.getElementById('chat-modal');
         const minimizeButton = document.getElementById('minimize-button');
@@ -627,14 +615,10 @@
         // Load previous messages from the API
         async function loadPreviousMessages() {
             if (previousMessagesLoaded) {
-                console.log('Chatbot Widget: Previous messages already loaded, skipping fetch');
                 return;
             }
             
-            console.log('Chatbot Widget: Loading previous messages');
             try {
-                console.log('Starting to load previous messages');
-                
                 // Create loading indicator
                 const loadingElement = document.createElement('div');
                 loadingElement.className = 'loading-indicator';
@@ -658,9 +642,6 @@
                     session_key: config.sessionKey
                 }).toString();
                 
-                console.log('Loading previous messages for session:', config.sessionKey);
-                console.log('Request URL:', `${url}?${queryParams}`);
-                
                 const response = await fetch(`${url}?${queryParams}`, {
                     method: 'GET',
                     headers: {
@@ -673,7 +654,6 @@
                 }
                 
                 const data = await response.json();
-                console.log('Previous messages loaded:', data);
                 
                 // Remove loading indicator
                 if (loadingElement.parentNode) {
@@ -685,7 +665,6 @@
                 
                 if (data.messages && Array.isArray(data.messages) && data.messages.length > 0) {
                     // Standard format with messages array
-                    console.log('Found messages array with', data.messages.length, 'messages');
                     data.messages.forEach(msg => {
                         const sender = msg.sender === 'user' || msg.role === 'user' ? 'user' : 'bot';
                         const text = msg.text || msg.content || msg.message || '';
@@ -697,7 +676,6 @@
                     });
                 } else if (data.conversation && Array.isArray(data.conversation) && data.conversation.length > 0) {
                     // Alternate format with conversation array
-                    console.log('Found conversation array with', data.conversation.length, 'messages');
                     data.conversation.forEach(msg => {
                         const sender = msg.sender === 'user' || msg.role === 'user' ? 'user' : 'bot';
                         const text = msg.text || msg.content || msg.message || '';
@@ -709,7 +687,6 @@
                     });
                 } else if (Array.isArray(data) && data.length > 0) {
                     // Direct array format
-                    console.log('Found direct array with', data.length, 'messages');
                     data.forEach(msg => {
                         const sender = msg.sender === 'user' || msg.role === 'user' ? 'user' : 'bot';
                         const text = msg.text || msg.content || msg.message || '';
@@ -721,11 +698,8 @@
                     });
                 } 
                 
-                console.log('Displayed', messagesDisplayed, 'messages');
-                
                 // If no messages were displayed, show initial message
                 if (messagesDisplayed === 0 && config.initialMessage) {
-                    console.log('No messages found, showing initial message');
                     addMessage(config.initialMessage, 'bot');
                 }
                 
@@ -751,24 +725,20 @@
         // Toggle chat
         function toggleChat() {
             isOpen = !isOpen;
-            console.log('Chatbot Widget: Toggling chat visibility, isOpen =', isOpen);
             chatButton.classList.toggle('open', isOpen);
             chatModal.classList.toggle('open', isOpen);
             
             if (isOpen) {
-                console.log('Chatbot Widget: Chat opened, focusing input');
                 chatInput.focus();
                 
                 // Load previous messages when opening the chat
                 loadPreviousMessages();
             } else {
-                console.log('Chatbot Widget: Chat closed');
             }
         }
         
         // Show typing indicator
         function showTypingIndicator() {
-            console.log('Chatbot Widget: Showing typing indicator');
             // Remove any existing typing indicator first
             hideTypingIndicator();
             
@@ -796,7 +766,6 @@
         
         // Hide typing indicator
         function hideTypingIndicator() {
-            console.log('Chatbot Widget: Hiding typing indicator');
             const typingIndicator = document.getElementById('typing-indicator');
             if (typingIndicator) {
                 typingIndicator.style.opacity = '0';
@@ -813,12 +782,9 @@
             const message = chatInput.value.trim();
             
             if (message === '') {
-                console.log('Chatbot Widget: Empty message, not sending');
                 return;
             }
             
-            console.log('Chatbot Widget: Sending user message:', message);
-            // Add message to chat
             addMessage(message, 'user');
             
             // Clear input
@@ -834,7 +800,6 @@
         
         // Add message to chat
         function addMessage(text, sender, timestamp = null) {
-            console.log(`Chatbot Widget: Adding ${sender} message:`, text);
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', `${sender}-message`);
             
@@ -873,7 +838,6 @@
         
         // Call chatbot API
         async function callChatbotAPI(message) {
-            console.log('Chatbot Widget: Calling API with message:', message);
             try {
                 // Use businessId from config with session key
                 const payload = {
@@ -884,10 +848,6 @@
                 
                 // API URL from config
                 const url = config.apiEndpoint;
-                
-                console.log('Sending request to API:', payload);
-                console.log('API Endpoint:', url);
-                console.log('Session Key:', config.sessionKey);
                 
                 const response = await fetch(url, {
                     method: 'POST',
@@ -903,7 +863,6 @@
                 }
                 
                 const data = await response.json();
-                console.log('API response received:', data);
                 
                 // Hide typing indicator
                 hideTypingIndicator();
@@ -923,9 +882,6 @@
         
         // Process API response
         function processResponse(data) {
-            console.log('Chatbot Widget: Processing API response:', data);
-            console.log('Processing response:', data);
-            
             if (data.response) {
                 addMessage(data.response, 'bot');
             } else if (data.reply) {
@@ -948,25 +904,20 @@
         }
         
         // Event listeners
-        console.log('Chatbot Widget: Adding event listeners to DOM elements');
         chatButton.addEventListener('click', function(e) {
-            console.log('Chatbot Widget: Chat button clicked');
             toggleChat();
         });
         
         minimizeButton.addEventListener('click', function(e) {
-            console.log('Chatbot Widget: Minimize button clicked');
             toggleChat();
         });
         
         sendButton.addEventListener('click', function(e) {
-            console.log('Chatbot Widget: Send button clicked');
             sendMessage();
         });
         
         chatInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
-                console.log('Chatbot Widget: Enter key pressed in input');
                 e.preventDefault();
                 sendMessage();
             }
@@ -976,10 +927,7 @@
         chatInput.addEventListener('input', () => {
             chatInput.style.height = 'auto';
             chatInput.style.height = (chatInput.scrollHeight > 100 ? 100 : chatInput.scrollHeight) + 'px';
-            console.log('Chatbot Widget: Resized input height to', chatInput.style.height);
         });
-        
-        console.log('Chatbot Widget: All event listeners initialized');
     }
 
     // Helper function to adjust color brightness
@@ -999,12 +947,10 @@
 
     // Initialize widget
     function initChatbotWidget(userConfig = {}) {
-        console.log('Chatbot Widget: Initialization started', userConfig);
         // Try to restore previous session from localStorage
         const storedSessionKey = localStorage.getItem('chatbotSessionKey');
         if (storedSessionKey && !userConfig.sessionKey) {
             userConfig.sessionKey = storedSessionKey;
-            console.log('Chatbot Widget: Restored session from localStorage:', storedSessionKey);
         }
         
         // Merge configurations
@@ -1018,22 +964,17 @@
         
         // Store session key for future visits
         localStorage.setItem('chatbotSessionKey', config.sessionKey);
-        console.log('Chatbot Widget: Session key stored in localStorage:', config.sessionKey);
         
         // Create widget
         injectStyles();
         createWidgetDOM();
         initEventListeners();
-        
-        // Remove auto-opening behavior - only open when button is clicked
-        console.log('Chatbot Widget: Initialization complete. Click the button to open the chat.');
     }
 
     // Expose to window
     window.ChatbotWidget = {
         init: initChatbotWidget,
         updateConfig: function(userConfig = {}) {
-            console.log('Chatbot Widget: updateConfig called with:', userConfig);
             // Get the current configuration
             const isValidConfig = mergeConfig(userConfig);
             
@@ -1048,7 +989,6 @@
                 const botNameEl = document.querySelector('.chat-title span');
                 if (botNameEl) {
                     botNameEl.textContent = config.botName;
-                    console.log('Chatbot Widget: Updated bot name in UI to:', config.botName);
                 } else {
                     console.warn('Chatbot Widget: Bot name element not found in DOM');
                 }
@@ -1058,7 +998,6 @@
                 const botAvatarEl = document.querySelector('.bot-avatar');
                 if (botAvatarEl) {
                     botAvatarEl.src = config.botAvatar;
-                    console.log('Chatbot Widget: Updated bot avatar in UI to:', config.botAvatar);
                 } else {
                     console.warn('Chatbot Widget: Bot avatar element not found in DOM');
                 }
@@ -1067,12 +1006,9 @@
             // Store updated session key
             localStorage.setItem('chatbotSessionKey', config.sessionKey);
             
-            console.log('Chatbot Widget: Configuration updated successfully');
             return true;
         }
     };
-    
-    console.log('Chatbot Widget: Global object created and exposed as window.ChatbotWidget');
 })();
 
 // Usage example:
