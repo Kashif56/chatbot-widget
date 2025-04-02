@@ -636,13 +636,14 @@
                 
                 // Build the URL with query parameters
                 const url = config.apiEndpoint;
+                // Remove trailing slash if present before adding query parameters
+                const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
                 const queryParams = new URLSearchParams({
                     action: 'get_messages',
-                    business_id: config.businessId,
                     session_key: config.sessionKey
                 }).toString();
                 
-                const response = await fetch(`${url}?${queryParams}`, {
+                const response = await fetch(`${cleanUrl}?${queryParams}`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
@@ -848,8 +849,10 @@
                 
                 // API URL from config
                 const url = config.apiEndpoint;
+                // Remove trailing slash if present for POST requests
+                const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
                 
-                const response = await fetch(url, {
+                const response = await fetch(cleanUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
