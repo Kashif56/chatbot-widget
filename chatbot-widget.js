@@ -664,7 +664,11 @@
                 // Display messages - handle different possible response formats
                 let messagesDisplayed = 0;
                 
-                if (data.messages && Array.isArray(data.messages) && data.messages.length > 0) {
+                // Check if the API returned a "No messages found" response
+                if (data.error === 'No messages found' && data.status === 'success') {
+                    // No messages found, will show initial message below
+                    messagesDisplayed = 0;
+                } else if (data.messages && Array.isArray(data.messages) && data.messages.length > 0) {
                     // Standard format with messages array
                     data.messages.forEach(msg => {
                         const sender = msg.sender === 'user' || msg.role === 'user' ? 'user' : 'bot';
